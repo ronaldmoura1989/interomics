@@ -15,7 +15,7 @@ InterOmics is a multiOmic App to integrate, in biological terms, Omics data. In 
 
 ## Install and Requirements
 
-1)  You need to have previously processed both WES and RNAseq data in csv format. The header of files must to have:
+1)  You need to have previously processed both WES and RNAseq data in csv format. The file must to have at least the following columns:
 
 -   sample: the sample id omics: exome or rnaseq.
 
@@ -47,9 +47,9 @@ InterOmics is a multiOmic App to integrate, in biological terms, Omics data. In 
 
 -   count: expression value (in TPM) for the gene in the sample.
 
-2.  R version 4.4.2+ (<https://www.r-project.org>).
+2)  R version 4.4.2+ (<https://www.r-project.org>).
 
-3.  the package [tidyverse v.2.0.0](https://www.tidyverse.org/).
+-   the package [tidyverse v.2.0.0](https://www.tidyverse.org/).
 
 ## Usage of InterOmics:
 

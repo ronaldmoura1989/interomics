@@ -11,7 +11,7 @@ Transcriptome sourced from Next-sequence generation
 ## Install and Requirements
 
 1.  You need to have previously processed both WES and RNAseq data in
-    csv format. The header of files must to have:
+    csv format. The file must to have at least the following columns:
 
 -   sample: the sample id omics: exome or rnaseq.
 
@@ -49,7 +49,7 @@ Transcriptome sourced from Next-sequence generation
 
 1.  R version 4.4.2+ (<https://www.r-project.org>).
 
-2.  the package [tidyverse v.2.0.0](https://www.tidyverse.org/).
+-   the package [tidyverse v.2.0.0](https://www.tidyverse.org/).
 
 ## Usage of InterOmics:
 
