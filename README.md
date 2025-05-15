@@ -1,14 +1,62 @@
-# InterOmics - Integration Scripts
+# InterOmics App: Integration Scripts
 Brandao et al.
 Last updated on: 15-05-2025
 
-## Requirements
+## Description
 
-Basically, you need to have previously processed both WES and RNAseq
-data. We present an object called *multiomics_individual_data* with an
-ideal input for the R commands that follows. In order to execute de
-commands, the package *tidyverse* v.2.0.0 would be essential to get all
-the integration we amid to make.
+InterOmics is a multiOmic App to integrate, in biological terms, Omics
+data. In this section, we InterOmics describe a R script to Genomic and
+Transcriptome sourced from Next-sequence generation
+
+## Install and Requirements
+
+1.  You need to have previously processed both WES and RNAseq data in
+    csv format. The header of files must to have:
+
+-   sample: the sample id omics: exome or rnaseq.
+
+-   genotype: e.g. het or hom.
+
+-   Chr: the chromosome number (e.g. chr1).
+
+-   Start: start base position of the variant.
+
+-   End: end base position of the variant Ref: reference allele
+    (e.g. A).
+
+-   Alt: alternative allele (e.g. C).
+
+-   Gene.refGene: the gene symbol (e.g. MBL2).
+
+-   Func.refGene: the location of the variant in the gene (e.g. exonic,
+    upstream).
+
+-   ExonicFunc.refGene: the consequence of the varition (e.g.,
+    nonsynonymous SNV).
+
+-   AF: GnomAD global allele frequency.
+
+-   avsnp154: dbSNP 154 identifier.
+
+-   QUAL: base quality score of the variant (e.g., 50).
+
+-   INFO_DP: depth of the variant (e.g., 142).
+
+-   ref.count: expression value (in TPM) for the gene, according to GTeX
+    database.
+
+-   count: expression value (in TPM) for the gene in the sample.
+
+1.  R version 4.4.2+ (<https://www.r-project.org>).
+
+2.  the package [tidyverse v.2.0.0](https://www.tidyverse.org/).
+
+## Usage of InterOmics:
+
+### Read files in R:
+
+We present an object called *multiomics_individual_data* with an ideal
+input for the R commands that follows. In order to execute de commands,
 
 <details class="code-fold">
 <summary>Code</summary>
@@ -20,7 +68,7 @@ multiomics_individual_data = data.table::fread("multiomics_individual_data.zip")
 
 </details>
 
-## ASE
+### Acessing ASE variants
 
 Allele Specific Expression (ASE) variants can be retrieved from the
 dataset using the command:
@@ -48,7 +96,7 @@ ase = multiomics_individual_data %>%
 
 </details>
 
-## RNAe
+### Acessing RNAe variants
 
 RNA edited variants, i.e., those that have changed during the mRNA
 processing stage, can be found by using the command:
@@ -76,7 +124,7 @@ rna_e = multiomics_individual_data %>%
 
 </details>
 
-## NMD variants
+### Acessing NMD variants
 
 Nonsense-mediated messenger RNA (mRNA) decay (NMD) can be seen using
 this command line:
@@ -116,7 +164,7 @@ nmd = multiomics_individual_data %>%
 
 </details>
 
-## Gain of Function (GoF) mutations
+### Acessing Gain of Function (GoF) variants
 
 GoF mutations can be fetched using this command:
 
@@ -157,7 +205,7 @@ gof = multiomics_individual_data %>%
 
 </details>
 
-## Generate tables
+### Generate tables
 
 To export the tables, we can iterate a function to create .tsv files
 that can be easily read by and spreadsheet software.
