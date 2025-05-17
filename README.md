@@ -1,53 +1,24 @@
 # InterOmics App: Integration Scripts
 Brandao et al.
-Last updated on: 15-05-2025
+Last updated on: 17-05-2025
 
 ## Description
 
 InterOmics is a multiOmic App to integrate, in biological terms, Omics
-data. In this section, we InterOmics describe a R script to Genomic and
-Transcriptome sourced from Next-sequence generation
+data. In this section, We describe a R script to integrate Genomic and
+Transcriptome data sourced from Next generation sequencing.
 
 ## Install and Requirements
 
-1.  You need to have previously processed both WES and RNAseq data in
-    csv format. The file must to have at least the following columns:
+1.  \*\* Input File \*\* You need to have previously processed both WES
+    and RNAseq data in csv format. The file must to have at least the
+    following columns:
 
--   sample: the sample id omics: exome or rnaseq.
+| sample | omics | genotype | Chr | Start | End | Ref | Alt | Gene.refGene | Func.refGene | ExonicFunc.refGene | AF | avsnp154 | QUAL | INFO_DP | ref.count | count |
+|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| Sample ID | exome or rnaseq | het or hom | Chromosome (e.g., chr1) | Start base position | End base position | Reference allele (e.g., A) | Alternative allele (e.g., C) | Gene symbol (e.g., MBL2) | Variant location in gene (e.g., exonic, upstream) | Variant consequence (e.g., nonsynonymous SNV) | GnomAD allele frequency | dbSNP 154 ID (e.g., rs…) | Base quality score (e.g., 50) | Depth (e.g., 142) | GTEx expression (TPM) | Sample expression (TPM) |
 
--   genotype: e.g. het or hom.
-
--   Chr: the chromosome number (e.g. chr1).
-
--   Start: start base position of the variant.
-
--   End: end base position of the variant Ref: reference allele
-    (e.g. A).
-
--   Alt: alternative allele (e.g. C).
-
--   Gene.refGene: the gene symbol (e.g. MBL2).
-
--   Func.refGene: the location of the variant in the gene (e.g. exonic,
-    upstream).
-
--   ExonicFunc.refGene: the consequence of the varition (e.g.,
-    nonsynonymous SNV).
-
--   AF: GnomAD global allele frequency.
-
--   avsnp154: dbSNP 154 identifier.
-
--   QUAL: base quality score of the variant (e.g., 50).
-
--   INFO_DP: depth of the variant (e.g., 142).
-
--   ref.count: expression value (in TPM) for the gene, according to GTeX
-    database.
-
--   count: expression value (in TPM) for the gene in the sample.
-
-1.  R version 4.4.2+ (<https://www.r-project.org>).
+1.  \*\* R version 4.4.2+ (<https://www.r-project.org>) \*\*
 
 -   the package [tidyverse v.2.0.0](https://www.tidyverse.org/).
 
@@ -85,8 +56,6 @@ ase = multiomics_individual_data %>%
   ungroup() %>% 
   filter(Chr %in% c(paste0("chr", seq(1,22)), "chrX", "chrY")) %>% 
   filter(omics == "rnaseq") %>% 
-  select(Chr:Gene.refGene, ExonicFunc.refGene, AF,
-         avsnp154:counts) %>%
   filter(!Func.refGene %in% c("intronic", "intergenic", "upstream",
                               "downstream")) %>%
   filter(ExonicFunc.refGene != "synonymous SNV") %>%
@@ -113,8 +82,6 @@ rna_e = multiomics_individual_data %>%
   ungroup() %>% 
   filter(Chr %in% c(paste0("chr", seq(1,22)), "chrX", "chrY")) %>% 
   filter(omics == "rnaseq") %>% 
-  select(Chr:Gene.refGene, ExonicFunc.refGene, AF, 
-         avsnp154:counts) %>% 
   filter(!Func.refGene %in% c("intronic", "intergenic", "upstream",
                               "downstream")) %>%
   filter(ExonicFunc.refGene != "synonymous SNV") %>%
@@ -136,10 +103,8 @@ this command line:
 nmd = multiomics_individual_data %>% 
   filter(Chr %in% c(paste0("chr", seq(1,22)), "chrX", "chrY")) %>% 
   filter(omics == "exome") %>% 
-  select(Chr:Gene.refGene, ExonicFunc.refGene, AF, 
-         avsnp154:counts) %>% 
   filter(grepl("stop|start|^frameshift", ExonicFunc.refGene) == TRUE) %>% 
-  # filter(AF < 0.01 | is.na(AF) == TRUE) %>%
+  filter(AF < 0.01 | is.na(AF) == TRUE) %>%
   mutate_at(.vars = c("ref.count", "counts"),
             .funs = ~ if_else(is.na(.x), 0, .x)) %>% 
   mutate(ref.count_categ = case_when(ref.count <  0.5 ~ "below cutoff",
@@ -175,8 +140,6 @@ GoF mutations can be fetched using this command:
 gof = multiomics_individual_data %>% 
   filter(Chr %in% c(paste0("chr", seq(1,22)), "chrX", "chrY")) %>% 
   filter(omics == "exome") %>% 
-  select(Chr:Gene.refGene, ExonicFunc.refGene, AF, 
-         avsnp154:counts) %>% 
   filter(!Func.refGene %in% c("ncRNA_intronic", "intronic", "intergenic")) %>%
   filter(grepl("synonymous SNV|^start|^stop|^frameshift|unknown", 
                ExonicFunc.refGene) == FALSE) %>%
